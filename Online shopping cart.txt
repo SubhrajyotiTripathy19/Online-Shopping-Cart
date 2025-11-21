@@ -1,0 +1,118 @@
+import java.util.Scanner;
+
+class Product {
+    int id;
+    String name;
+    double price;
+
+    Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+}
+
+class CartItem {
+    Product product;
+    int quantity;
+
+    CartItem(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+}
+
+public class ShoppingCartApp {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // Product List (Array)
+        Product[] products = {
+                new Product(1, "Laptop", 45000),
+                new Product(2, "Mouse", 500),
+                new Product(3, "Keyboard", 700),
+                new Product(4, "USB Cable", 150),
+                new Product(5, "Headphones", 1200)
+        };
+
+        // Shopping Cart (Array)
+        CartItem[] cart = new CartItem[10];
+        int cartCount = 0;
+
+        while (true) {
+            System.out.println("\n===== ONLINE SHOPPING CART =====");
+            System.out.println("1. View Products");
+            System.out.println("2. Add to Cart");
+            System.out.println("3. Display Bill");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("\nAvailable Products:");
+                    System.out.println("ID\tName\t\tPrice");
+                    for (Product p : products) {
+                        System.out.println(p.id + "\t" + p.name + "\t\t" + p.price);
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("\nEnter Product ID to Add: ");
+                    int id = sc.nextInt();
+
+                    Product selectedProduct = null;
+                    for (Product p : products) {
+                        if (p.id == id) {
+                            selectedProduct = p;
+                            break;
+                        }
+                    }
+
+                    if (selectedProduct == null) {
+                        System.out.println("Invalid Product ID!");
+                        break;
+                    }
+
+                    System.out.print("Enter quantity: ");
+                    int qty = sc.nextInt();
+
+                    cart[cartCount] = new CartItem(selectedProduct, qty);
+                    cartCount++;
+
+                    System.out.println("Added to Cart Successfully!");
+                    break;
+
+                case 3:
+                    System.out.println("\n===== BILL SUMMARY =====");
+                    double total = 0;
+
+                    System.out.println("Product\tQty\tPrice\tAmount");
+                    for (int i = 0; i < cartCount; i++) {
+                        CartItem item = cart[i];
+                        double amount = item.quantity * item.product.price;
+                        total += amount;
+
+                        System.out.println(item.product.name + "\t" + item.quantity + "\t" +
+                                item.product.price + "\t" + amount);
+                    }
+
+                    System.out.println("-----------------------------------");
+                    System.out.println("Total Amount: Rs " + total);
+                    System.out.println("-----------------------------------");
+                    break;
+
+                case 4:
+                    System.out.println("Thank you for shopping!");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
